@@ -1,4 +1,4 @@
-const User = require('../models/userSchema');
+const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const getDataUri = require('../utils/dataUri');
@@ -95,7 +95,7 @@ const loginUser = async (req, res) => {
         message: `Welcome back ${user.userName}`,
         success: true,
         user,
-        token: token,
+        // token: token,
       });
   } catch (error) {
     console.log(error);
@@ -145,7 +145,15 @@ const editProfile = async (req, res) => {
 
     if (profilePicture) {
       const fileUri = getDataUri(profilePicture);
-      cloudResponse = await cloudinary.uploader.upload(fileUri);
+      awaitcloudResponse = await cloudinary.uploader.upload(fileUri);
+    }
+
+    const user = await User.findById(userID);
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: 'User not found', success: false });
     }
 
     if (bio) {
@@ -175,7 +183,7 @@ const editProfile = async (req, res) => {
 
 const suggestedUsers = async (req, res) => {
   try {
-    const suggestedUser = await User.findOne({ _id: { $ne: req.id } }).select(
+    const suggestedUser = await User.find({ _id: { $ne: req.id } }).select(
       '-password'
     );
 
