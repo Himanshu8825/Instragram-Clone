@@ -2,12 +2,13 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const getDataUri = require('../utils/dataUri');
+const cloudinary = require('../utils/cloudinary')
 
 const registerUser = async (req, res) => {
   try {
-    const { userName, email, password } = req.body;
+    const { username, email, password } = req.body;
 
-    if (!userName || !email || !password) {
+    if (!username || !email || !password) {
       return res
         .status(400)
         .json({ message: 'All fields are required', success: false });
@@ -23,7 +24,7 @@ const registerUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await User.create({
-      userName,
+      username,
       email,
       password: hashedPassword,
     });
@@ -75,7 +76,7 @@ const loginUser = async (req, res) => {
 
     user = {
       _id: user._id,
-      userName: user.userName,
+      username: user.username,
       email: user.email,
       profilePicture: user.profilePicture,
       bio: user.bio,
@@ -92,7 +93,7 @@ const loginUser = async (req, res) => {
         httpOnly: true,
       })
       .json({
-        message: `Welcome back ${user.userName}`,
+        message: `Welcome back ${user.username}`,
         success: true,
         user,
         // token: token,
@@ -123,7 +124,7 @@ const getProfile = async (req, res) => {
   try {
     const userID = req.params.id;
 
-    let user = await User.findById(userID);
+    let user = await User.findById(userID).select('-password');
 
     return res.status(200).json({ user, success: true });
   } catch (error) {
@@ -136,43 +137,36 @@ const getProfile = async (req, res) => {
 
 const editProfile = async (req, res) => {
   try {
-    const userID = req.id;
+    const userId = req.id;
+    console.log(userId);
 
     const { bio, gender } = req.body;
     const profilePicture = req.file;
-
     let cloudResponse;
 
     if (profilePicture) {
       const fileUri = getDataUri(profilePicture);
-      awaitcloudResponse = await cloudinary.uploader.upload(fileUri);
+      cloudResponse = await cloudinary.uploader.upload(fileUri);
     }
 
-    const user = await User.findById(userID);
-
+    const user = await User.findById(userId).select('-password');
     if (!user) {
-      return res
-        .status(404)
-        .json({ message: 'User not found', success: false });
+      return res.status(404).json({
+        message: 'User not found.',
+        success: false,
+      });
     }
+    if (bio) user.bio = bio;
+    if (gender) user.gender = gender;
+    if (profilePicture) user.profilePicture = cloudResponse.secure_url;
 
-    if (bio) {
-      user.bio = bio;
-    }
+    await user.save();
 
-    if (gender) {
-      user.gender = gender;
-    }
-
-    if (profilePicture) {
-      User.profilePicture = cloudResponse.secure_url;
-    }
-
-    await User.save();
-
-    return res
-      .status(200)
-      .json({ message: 'Profile Updated', User, success: true });
+    return res.status(200).json({
+      message: 'Profile updated.',
+      success: true,
+      user,
+    });
   } catch (error) {
     console.log(error);
     return res
@@ -223,7 +217,7 @@ const followOfUnfollow = async (req, res) => {
         .json({ message: 'User not found', success: false });
     }
 
-    const isFollowing = User.following.includes(following);
+    const isFollowing = user.following.includes(following);
 
     if (isFollowing) {
       await Promise.all([

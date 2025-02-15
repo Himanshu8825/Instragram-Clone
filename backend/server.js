@@ -32,6 +32,8 @@ connectDB();
 
 app.use('/api/v1/users', userRouter);
 
+//"http://localhost:3000/api/v1/users"
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
