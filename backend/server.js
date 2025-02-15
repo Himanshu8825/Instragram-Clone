@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const connectDB = require('./utils/DB');
+const userRouter = require('./routes/userRoutes');
 
 const app = express();
 
@@ -28,6 +29,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 connectDB();
+
+app.use('/api/v1/users', userRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
