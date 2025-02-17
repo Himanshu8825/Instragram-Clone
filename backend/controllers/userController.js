@@ -2,7 +2,7 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const getDataUri = require('../utils/dataUri');
-const cloudinary = require('../utils/cloudinary')
+const cloudinary = require('../utils/cloudinary');
 
 const registerUser = async (req, res) => {
   try {

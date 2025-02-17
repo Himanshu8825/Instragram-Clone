@@ -1,52 +1,55 @@
 const mongoose = require('mongoose');
 
-const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema(
+  {
     username: {
-        type: String,
-        required: true,
-        unique: true
+      type: String,
+      required: true,
+      unique: true,
     },
     email: {
-        type: String,
-        required: true,
-        unique: true
+      type: String,
+      required: true,
+      unique: true,
     },
     password: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     profilePicture: {
-        type: String,
-        default: ''
+      type: String,
+      default: '',
     },
     gender: {
-        type: String,
-        enum: ['Male', 'Female', 'Other']
+      type: String,
+      enum: ['Male', 'Female', 'Other'],
     },
     bio: {
-        type: String,
-        default: ''
+      type: String,
+      default: '',
     },
     posts: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Post'
-        }
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post',
+      },
     ],
     followers: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
-        }
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
     ],
     following: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
-        }
-    ]
-} , {timestamps: true})
-
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+    bookmarks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
+  },
+  { timestamps: true }
+);
 
 const User = mongoose.model('User', userSchema);
 
