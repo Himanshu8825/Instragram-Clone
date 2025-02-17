@@ -4,6 +4,8 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const connectDB = require('./utils/DB');
 const userRouter = require('./routes/userRoutes');
+const postRouter = require('./routes/postRoutes');
+const messageRouter = require('./routes/messageRoutes');
 
 const app = express();
 
@@ -31,6 +33,8 @@ app.use(cookieParser());
 connectDB();
 
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/posts', postRouter);
+app.use('/api/v1/messages', messageRouter);
 
 //"http://localhost:3000/api/v1/users"
 
