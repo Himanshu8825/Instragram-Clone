@@ -277,3 +277,15 @@ const bookMarkPost = async (req, res) => {
       .json({ success: false, message: 'error while bookmarking post' });
   }
 };
+
+module.exports = {
+  addNewPost,
+  getAllPost,
+  getUserPosts,
+  likePost,
+  dislikePost,
+  addComment,
+  commentsForSapratePost,
+  deletePost,
+  bookMarkPost,
+};
