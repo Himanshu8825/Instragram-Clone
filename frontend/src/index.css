@@ -2,11 +2,69 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ... */
+
+
+/* Set the base font (Inter) for the entire page */
+body {
+  font-family: 'Inter', sans-serif; /* Inter font for body text */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: #262626; /* Default text color (dark gray) */
+  line-height: 1.6; /* Improve readability with line height */
+}
+
+/* Apply Poppins font to headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif; /* Poppins for headings */
+  font-weight: bold; /* Make headings bold */
+
+}
+
+/* Paragraphs will use Roboto font */
+p {
+  font-family: 'Roboto', sans-serif; /* Roboto font for paragraphs */
+  color: #8E8E8E; /* Muted text color */
+  line-height: 1.6; /* Improve readability with line height */
+
+}
+
+/* Links style */
+Link {
+  text-decoration: none;
+  font-family: 'Poppins', sans-serif; /* Poppins for links */
+  font-weight: 500; /* Semi-bold for links */
+  transition: color 0.3s ease-in-out;
+}
+
+/* Button style for text */
+Button {
+  font-family: 'Poppins', sans-serif; /* Poppins for buttons */
+}
+
+/* Apply muted text color to timestamps or small labels */
+.muted-text {
+  font-family: 'Roboto', sans-serif; /* Roboto for muted text */
+  color: #8E8E8E; /* Muted gray color */
+  font-size: 0.900rem; /* Slightly smaller text */
+}
+
+/* Modal or Popup Background */
+.modal {
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 
 @layer base {
   :root {
-
     --background: 0 0% 100%;
 
     --foreground: 224 71.4% 4.1%;
@@ -55,10 +113,9 @@
 
     --chart-5: 27 87% 67%;
 
-    --radius: 0.5rem
+    --radius: 0.5rem;
   }
   .dark {
-
     --background: 224 71.4% 4.1%;
 
     --foreground: 210 20% 98%;
@@ -105,7 +162,7 @@
 
     --chart-4: 280 65% 60%;
 
-    --chart-5: 340 75% 55%
+    --chart-5: 340 75% 55%;
   }
 }
 
