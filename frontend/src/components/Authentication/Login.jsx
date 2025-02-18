@@ -32,6 +32,7 @@ const Login = () => {
         },
         withCredentials: true,
       });
+      //   console.log(res);
 
       if (res.status === 200) {
         navigate('/');
@@ -93,7 +94,7 @@ const Login = () => {
         </div>
         <Button
           type="submit"
-          className={`bg-insta-primary text-white h-8 hover:bg-insta-hoverPrimary rounded-md mt-4 ${
+          className={`bg-insta-primary text-white h-8 hover:bg-insta-hoverPrimar rounded-md mt-4 ${
             loading ? 'cursor-not-allowed  bg-green-500' : ''
           }`}
         >
