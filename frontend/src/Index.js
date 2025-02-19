@@ -1,10 +1,28 @@
 import Login from './components/Authentication/Login';
 import Signup from './components/Authentication/Signup';
+import Feed from './components/Feed/Feed';
+import Post from './components/Feed/Post';
+import Posts from './components/Feed/Posts';
 import Home from './components/Layout/Home';
 import MainLayout from './components/Layout/MainLayout';
 import Profile from './components/Layout/Profile';
+import LeftSidebar from './components/Sidebar/LeftSidebar';
+import RightSidebar from './components/Sidebar/RightSidebar';
+import CommentDilogue from './components/CommentDilogue';
 
-export { Home, Login, MainLayout, Signup , Profile };
+export {
+  Feed,
+  Home,
+  LeftSidebar,
+  Login,
+  MainLayout,
+  Post,
+  Posts,
+  Profile,
+  RightSidebar,
+  Signup,
+  CommentDilogue
+};
 
 /*
 <div className="bg-gradient-to-r from-insta-instaGradientStart via-insta-instaGradientMid2 to-insta-instaGradientEnd p-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">
