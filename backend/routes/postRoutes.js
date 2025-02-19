@@ -28,13 +28,13 @@ postRouter.get('/userpost/all', isAuthenticated, getUserPosts);
 
 postRouter.get('/:id/like', isAuthenticated, likePost);
 
-postRouter.get('/id/dislike', isAuthenticated, dislikePost);
+postRouter.get('/:id/dislike', isAuthenticated, dislikePost);
 
 postRouter.post('/:id/comment', isAuthenticated, addComment);
 
 postRouter.get('/:id/comment/all', isAuthenticated, commentsForSapratePost);
 
-postRouter.post('/delete/:id', isAuthenticated, deletePost);
+postRouter.delete('/delete/:id', isAuthenticated, deletePost);
 
 postRouter.post('/:id/bookmark', isAuthenticated, bookMarkPost);
 

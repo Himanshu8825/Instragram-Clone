@@ -40,7 +40,7 @@ const CreatePost = ({ open, setOpen }) => {
         },
         withCredentials: true,
       });
-      console.log(res);
+    //   console.log(res);
       if (res.status === 201) {
         dispatch(setPosts([res.data.post, ...posts]));
 

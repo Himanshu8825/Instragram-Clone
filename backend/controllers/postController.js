@@ -59,7 +59,7 @@ const getAllPost = async (req, res) => {
       .populate({ path: 'author', select: 'username profilePicture' })
       .populate({
         path: 'comments',
-        options: { sort: { createdAt: -1 } }, 
+        options: { sort: { createdAt: -1 } },
         populate: { path: 'author', select: 'username profilePicture' },
       });
 
@@ -165,7 +165,12 @@ const addComment = async (req, res) => {
       text,
       author: commentedUserId,
       post: postId,
-    }).populate({ path: 'author', select: 'username , profilePicture' });
+    });
+
+    await comment.populate({
+      path: 'author',
+      select: 'username  profilePicture',
+    });
 
     post.comments.push(comment._id);
     await post.save();
@@ -186,7 +191,7 @@ const commentsForSapratePost = async (req, res) => {
     const postId = req.params.id;
     const comments = await Comment.find({ id: postId }).populate(
       'author',
-      'username ,profilePicture'
+      'username profilePicture'
     );
 
     if (!comments) {

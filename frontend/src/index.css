@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 /* Set the base font (Inter) for the entire page */
 body {
   font-family: 'Inter', sans-serif; /* Inter font for body text */
@@ -15,18 +13,21 @@ body {
 }
 
 /* Apply Poppins font to headings */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Poppins', sans-serif; /* Poppins for headings */
   font-weight: bold; /* Make headings bold */
-
 }
 
 /* Paragraphs will use Roboto font */
 p {
   font-family: 'Roboto', sans-serif; /* Roboto font for paragraphs */
-  color: #8E8E8E; /* Muted text color */
+  color: #8e8e8e; /* Muted text color */
   line-height: 1.6; /* Improve readability with line height */
-
 }
 
 /* Links style */
@@ -45,8 +46,8 @@ Button {
 /* Apply muted text color to timestamps or small labels */
 .muted-text {
   font-family: 'Roboto', sans-serif; /* Roboto for muted text */
-  color: #8E8E8E; /* Muted gray color */
-  font-size: 0.900rem; /* Slightly smaller text */
+  color: #8e8e8e; /* Muted gray color */
+  font-size: 0.9rem; /* Slightly smaller text */
 }
 
 /* Modal or Popup Background */
@@ -62,6 +63,15 @@ Button {
   align-items: center;
 }
 
+/* Custom scrollbar-hide class */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* For Firefox */
+.scrollbar-hide {
+  scrollbar-width: none;
+}
 
 @layer base {
   :root {

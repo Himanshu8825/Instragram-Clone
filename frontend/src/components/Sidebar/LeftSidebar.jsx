@@ -13,6 +13,7 @@ import {
 // import { sidebarItems } from '@/utils/constan';
 import { CreatePost } from '@/Index';
 import { setAuthUser } from '@/Redux/Slices/authSlices';
+import { setPosts, setSelectedPost } from '@/Redux/Slices/postSlice';
 import axios from 'axios';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -36,6 +37,8 @@ const LeftSidebar = () => {
 
       if (res.status === 200) {
         dispatch(setAuthUser(null));
+        dispatch(setSelectedPost(null));
+        setPosts([]);
         navigate('/login');
         toast({
           title: res?.data?.message,

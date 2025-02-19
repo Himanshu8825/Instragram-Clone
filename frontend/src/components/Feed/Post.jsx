@@ -1,12 +1,18 @@
+import { useToast } from '@/hooks/use-toast';
 import { CommentDilogue } from '@/Index';
+import { setPosts, setSelectedPost } from '@/Redux/Slices/postSlice';
+import axios from 'axios';
+import { motion } from 'framer-motion';
 import {
+
   Bookmark,
   Heart,
   MessageCircle,
   MoreHorizontal,
-  Send,
+  SendHorizontal,
 } from 'lucide-react';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Card, CardContent } from '../ui/card';
 import {
@@ -16,10 +22,21 @@ import {
   DialogTrigger,
 } from '../ui/dialog';
 import { Input } from '../ui/input';
+import { Badge } from '../ui/badge';
 
 const Post = ({ post }) => {
+  const { user } = useSelector((state) => state.auth);
+  const { posts } = useSelector((state) => state.post);
+  const { selectedPost } = useSelector((state) => state.post);
   const [text, setText] = useState('');
   const [open, setOpen] = useState(false);
+  const [liked, setLiked] = useState(post.likes.includes(user._id) || false);
+  const [postLike, setPostLike] = useState(post.likes.length);
+  const [comment, setComment] = useState(post.comments);
+
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
+  const dispatch = useDispatch();
+  const { toast } = useToast();
 
   const getTimeAgo = (createdAt) => {
     if (!createdAt) return 'Just now';
@@ -53,6 +70,128 @@ const Post = ({ post }) => {
     }
   };
 
+  const deletePostHandler = async () => {
+    try {
+      const res = await axios.delete(
+        `${API_BASE_URL}/posts/delete/${post._id}`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (res.status === 200) {
+        const updatedPost = posts.filter(
+          (postItem) => postItem?._id !== post?._id
+        );
+
+        dispatch(setPosts(updatedPost));
+        toast({
+          title: res?.data?.message,
+          variant: 'success',
+        });
+
+        setOpen(false);
+      }
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: error?.response?.data?.message,
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const likeDislikeHandler = async () => {
+    try {
+      const action = liked ? 'dislike' : 'like';
+      const res = await axios.get(
+        `${API_BASE_URL}/posts/${post._id}/${action}`,
+        {
+          withCredentials: true,
+        }
+      );
+      if (res.status === 200) {
+        const updatedPost = liked ? postLike - 1 : postLike + 1;
+        setPostLike(updatedPost);
+        setLiked(!liked);
+
+        const updatedPostData = posts.map((item) =>
+          item._id === post._id
+            ? {
+                ...item,
+                likes: liked
+                  ? item.likes.filter((id) => id !== user._id)
+                  : [...item.likes, user._id],
+              }
+            : item
+        );
+
+        dispatch(setPosts(updatedPostData));
+
+        toast({
+          title: res?.data?.message,
+          variant: 'success',
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: error?.response?.data?.message,
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const commentHandler = async () => {
+    try {
+      const res = await axios.post(
+        `${API_BASE_URL}/posts/${post._id}/comment`,
+        { text },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (res.status === 201) {
+        const newComment = res.data.comment;
+        const updatedCommentData = [...comment, newComment];
+
+        // Update local comment state
+        setComment(updatedCommentData);
+
+        // ✅ Update selectedPost in Redux store
+        const updatedSelectedPost = {
+          ...post,
+          comments: updatedCommentData,
+        };
+        dispatch(setSelectedPost(updatedSelectedPost));
+
+        const updatedPostData = posts.map((item) =>
+          item._id === post._id
+            ? { ...item, comments: updatedCommentData }
+            : item
+        );
+        dispatch(setPosts(updatedPostData));
+
+        toast({
+          title: 'Comment added successfully',
+          variant: 'success',
+        });
+
+        setText('');
+      }
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: error?.response?.data?.message || 'Failed to add comment',
+        variant: 'destructive',
+      });
+    }
+  };
+
   return (
     <Card className=" w-full mx-auto border-none rounded-lg shadow-sm px-2 py-2 ">
       {/* Header - User Info */}
@@ -63,7 +202,10 @@ const Post = ({ post }) => {
             <AvatarFallback>U</AvatarFallback>
           </Avatar>
           <div className="ml-3">
-            <p className="text-sm font-semibold">{post?.author?.username}</p>
+            <div className='flex items-center gap-2'>
+              <p className="text-sm font-semibold">{post?.author?.username}</p>
+              {user?._id === post?.author?._id && <Badge className="h-6 cursor-pointer" variant="secondary">Author</Badge>}
+            </div>
             <p className="text-xs text-gray-500">
               {getTimeAgo(post?.createdAt)}
             </p>
@@ -79,13 +221,28 @@ const Post = ({ post }) => {
           </DialogTrigger>
           <DialogContent className="p-4 rounded-lg shadow-lg max-w-xs text-center">
             <div className="flex flex-col mt-2 text-sm text-center">
-              <div className="py-3 font-bold text-red-500 cursor-pointer">
-                Unfollow
-              </div>
+              {post.author._id !== user._id ? (
+                <div className="py-3 font-bold text-red-500 cursor-pointer">
+                  Unfollow
+                </div>
+              ) : (
+                ''
+              )}
+
               <div className="py-3 font-semibold cursor-pointer">
                 Add to Favorites
               </div>
-              <div className="py-3 font-semibold cursor-pointer">Delete</div>
+              {post.author._id === user._id ? (
+                <div
+                  onClick={deletePostHandler}
+                  className="py-3 font-semibold cursor-pointer"
+                >
+                  Delete
+                </div>
+              ) : (
+                ''
+              )}
+
               <DialogClose asChild>
                 <div className="py-3 font-semibold cursor-pointer">Cancel</div>
               </DialogClose>
@@ -105,15 +262,33 @@ const Post = ({ post }) => {
 
       {/* Action Buttons */}
       <div className="flex items-center justify-between p-1">
-        <div className="flex gap-1">
-          <div className="p-1 rounded-full hover:bg-gray-100 cursor-pointer">
-            <Heart className="w-5 h-5" />
+        <div className="flex gap-1 items-center">
+          <motion.div
+            whileTap={{ scale: 0.8 }}
+            initial={{ scale: 1 }}
+            animate={{ scale: liked ? 1.2 : 1 }}
+            transition={{ type: 'spring', stiffness: 300 }}
+            className="cursor-pointer p-1 "
+          >
+            <Heart
+              onClick={() => likeDislikeHandler()}
+              className="w-5 h-5 transition-all duration-300 ease-in-out"
+              color={liked ? 'red' : 'black'}
+              fill={liked ? 'red' : 'none'}
+            />
+          </motion.div>
+
+          <div className="p-1 rounded-full cursor-pointer">
+            <MessageCircle
+              onClick={() => {
+                dispatch(setSelectedPost(post));
+                setOpen(true);
+              }}
+              className="w-6 h-6"
+            />
           </div>
-          <div className="p-1 rounded-full hover:bg-gray-100 cursor-pointer">
-            <MessageCircle onClick={() => setOpen(true)} className="w-5 h-5" />
-          </div>
-          <div className="p-1 rounded-full hover:bg-gray-100 cursor-pointer">
-            <Send className="w-5 h-5" />
+          <div className="p-1 rounded-full  cursor-pointer">
+            <SendHorizontal className="w-6 h-6 transform rotate-[330deg]" />
           </div>
         </div>
         <div className="p-2 rounded-full hover:bg-gray-100 cursor-pointer">
@@ -123,16 +298,25 @@ const Post = ({ post }) => {
 
       {/* Like Count & Caption */}
       <div className="px-3">
-        <p className="text-sm font-semibold">{post?.likes?.length} likes</p>
+        <p className="text-sm font-semibold">{postLike} likes</p>
         <p className="text-sm">
           <span className="font-semibold">{post?.author?.username} </span>
           {post?.caption}
         </p>
       </div>
 
-      {/* View All Comments Link & Modal */}
+      <div
+        onClick={() => {
+          dispatch(setSelectedPost(post));
+          setOpen(true);
+        }}
+        className="px-3 py-1 cursor-pointer text-gray-500 text-sm font-semibold"
+      >
+        View all {post?.comments?.length > 0 ? post?.comments?.length : ' '}{' '}
+        Comments
+      </div>
 
-      <CommentDilogue open={open} setOpen={setOpen} post={post} />
+      {open && <CommentDilogue open={open} setOpen={setOpen} post={post} />}
 
       {/* Comment Input */}
       <div className="flex justify-center items-center px-3 py-2 border-t">
@@ -143,7 +327,12 @@ const Post = ({ post }) => {
           onChange={changeEentHandler}
         />
         {text && (
-          <span className="text-insta-primary text-sm font-semibold">Post</span>
+          <span
+            onClick={commentHandler}
+            className="text-insta-primary text-sm font-semibold cursor-pointer"
+          >
+            Post
+          </span>
         )}
       </div>
     </Card>
