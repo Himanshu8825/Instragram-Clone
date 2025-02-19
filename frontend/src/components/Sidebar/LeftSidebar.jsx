@@ -11,12 +11,15 @@ import {
   TrendingUp,
 } from 'lucide-react';
 // import { sidebarItems } from '@/utils/constan';
+import { CreatePost } from '@/Index';
+import { setAuthUser } from '@/Redux/Slices/authSlices';
 import axios from 'axios';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setAuthUser } from '@/Redux/Slices/authSlices';
 
 const LeftSidebar = () => {
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
   const API_BASE_URL = import.meta.env.VITE_API_URL;
@@ -32,7 +35,7 @@ const LeftSidebar = () => {
       console.log(res);
 
       if (res.status === 200) {
-        dispatch(setAuthUser(null))
+        dispatch(setAuthUser(null));
         navigate('/login');
         toast({
           title: res?.data?.message,
@@ -51,6 +54,8 @@ const LeftSidebar = () => {
   const sideHandler = (item) => {
     if (item.text === 'Logout') {
       handleLogout();
+    } else if (item.text === 'Create') {
+      setOpen(true);
     }
   };
 
@@ -75,7 +80,7 @@ const LeftSidebar = () => {
   ];
 
   return (
-    <div className="fixed top-0 z-10 left-0 px-4 border-r border-gray-300 w-[16%] h-screen">
+    <div className="fixed top-0 z-10 left-0 px-4 border-r border-gray-300 w-[20%] h-screen">
       <div className="flex flex-col">
         <h1 className="my-8 pl-3 font-bold text-xl">LOGO</h1>
         <div className="flex flex-col gap-4">
@@ -93,6 +98,7 @@ const LeftSidebar = () => {
           })}
         </div>
       </div>
+      <CreatePost open={open} setOpen={setOpen} />
     </div>
   );
 };

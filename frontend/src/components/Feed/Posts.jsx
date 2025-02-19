@@ -1,11 +1,15 @@
 import { Post } from '@/Index';
+import { useSelector } from 'react-redux';
 
 const Posts = () => {
+  const { posts } = useSelector((state) => state.post);
+
+
+
   return (
-    <div>
-      {' '}
-      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
-        <Post key={index} />
+    <div className="w-[40%]">
+      {posts?.map((post) => (
+        <Post key={post._id} post={post}  />
       ))}{' '}
     </div>
   );

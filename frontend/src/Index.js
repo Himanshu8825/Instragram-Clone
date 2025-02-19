@@ -1,5 +1,7 @@
 import Login from './components/Authentication/Login';
 import Signup from './components/Authentication/Signup';
+import CommentDilogue from './components/CommentDilogue';
+import CreatePost from './components/Feed/CreatePost';
 import Feed from './components/Feed/Feed';
 import Post from './components/Feed/Post';
 import Posts from './components/Feed/Posts';
@@ -8,9 +10,11 @@ import MainLayout from './components/Layout/MainLayout';
 import Profile from './components/Layout/Profile';
 import LeftSidebar from './components/Sidebar/LeftSidebar';
 import RightSidebar from './components/Sidebar/RightSidebar';
-import CommentDilogue from './components/CommentDilogue';
+import GetAllPosts from './hooks/GetAllPosts';
 
 export {
+  CommentDilogue,
+  CreatePost,
   Feed,
   Home,
   LeftSidebar,
@@ -21,7 +25,7 @@ export {
   Profile,
   RightSidebar,
   Signup,
-  CommentDilogue
+  GetAllPosts,
 };
 
 /*

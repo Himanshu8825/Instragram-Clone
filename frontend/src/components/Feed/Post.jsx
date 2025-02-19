@@ -17,9 +17,32 @@ import {
 } from '../ui/dialog';
 import { Input } from '../ui/input';
 
-const Post = () => {
+const Post = ({ post }) => {
   const [text, setText] = useState('');
   const [open, setOpen] = useState(false);
+
+  const getTimeAgo = (createdAt) => {
+    if (!createdAt) return 'Just now';
+
+    const createdDate = new Date(createdAt);
+    const now = new Date();
+    const diffInMilliseconds = now - createdDate;
+    const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    const diffInHours = Math.floor(diffInMinutes / 60);
+
+    if (diffInSeconds < 10) {
+      return 'Just now'; // 10 sec se kam ho to "Just now"
+    } else if (diffInMinutes < 1) {
+      return `${diffInSeconds} seconds ago`; // 10 sec se upar but 1 min se kam ho
+    } else if (diffInMinutes < 60) {
+      return `${diffInMinutes} minutes ago`; // 1 min se upar but 1 hour se kam ho
+    } else if (diffInHours === 1) {
+      return '1 hour ago'; // Exact 1 hour
+    } else {
+      return `${diffInHours} hours ago`; // 1 hour se upar ho to
+    }
+  };
 
   const changeEentHandler = (e) => {
     const inputText = e.target.value;
@@ -31,20 +54,19 @@ const Post = () => {
   };
 
   return (
-    <Card className="max-w-xl mx-auto border rounded-lg shadow-sm">
+    <Card className=" w-full mx-auto border-none rounded-lg shadow-sm px-2 py-2 ">
       {/* Header - User Info */}
       <div className="flex items-center justify-between p-3">
         <div className="flex items-center">
           <Avatar className="w-10 h-10">
-            <AvatarImage
-              src=""
-              alt="User"
-            />
+            <AvatarImage src={post?.author?.profilePicture} alt="User" />
             <AvatarFallback>U</AvatarFallback>
           </Avatar>
           <div className="ml-3">
-            <p className="text-sm font-semibold">Suraj Kumar</p>
-            <p className="text-xs text-gray-500">2 hours ago</p>
+            <p className="text-sm font-semibold">{post?.author?.username}</p>
+            <p className="text-xs text-gray-500">
+              {getTimeAgo(post?.createdAt)}
+            </p>
           </div>
         </div>
 
@@ -75,14 +97,14 @@ const Post = () => {
       {/* Post Image */}
       <CardContent className="p-0">
         <img
-          src="https://res.cloudinary.com/dh3nmgwdy/image/upload/v1739655129/ok02vsprcryhvabjpswg.jpg"
+          src={post?.image}
           alt="Post"
-          className="w-full object-cover"
+          className="w-full object-cover h-[450px] object-top rounded"
         />
       </CardContent>
 
       {/* Action Buttons */}
-      <div className="flex items-center justify-between px-1 py-2">
+      <div className="flex items-center justify-between p-1">
         <div className="flex gap-1">
           <div className="p-1 rounded-full hover:bg-gray-100 cursor-pointer">
             <Heart className="w-5 h-5" />
@@ -101,16 +123,16 @@ const Post = () => {
 
       {/* Like Count & Caption */}
       <div className="px-3">
-        <p className="text-sm font-semibold">1,234 likes</p>
+        <p className="text-sm font-semibold">{post?.likes?.length} likes</p>
         <p className="text-sm">
-          <span className="font-semibold">Suraj Kumar </span>
-          This is an amazing Instagram post! 🚀✨
+          <span className="font-semibold">{post?.author?.username} </span>
+          {post?.caption}
         </p>
       </div>
 
       {/* View All Comments Link & Modal */}
 
-      <CommentDilogue open={open} setOpen={setOpen} />
+      <CommentDilogue open={open} setOpen={setOpen} post={post} />
 
       {/* Comment Input */}
       <div className="flex justify-center items-center px-3 py-2 border-t">

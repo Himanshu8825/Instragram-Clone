@@ -149,9 +149,11 @@ const getProfile = async (req, res) => {
 const editProfile = async (req, res) => {
   try {
     const userId = req.id;
-    console.log(userId);
+    // console.log(userId);
 
-    const { bio, gender } = req.body;
+    const { bio, gender, password, username } = req.body;
+
+
     const profilePicture = req.file;
     let cloudResponse;
 
@@ -167,8 +169,18 @@ const editProfile = async (req, res) => {
         success: false,
       });
     }
+
     if (bio) user.bio = bio;
     if (gender) user.gender = gender;
+    if (username) {
+      console.log(username);
+
+      user.username = username;
+    }
+    if (password) {
+      const salt = await bcrypt.genSalt(10); // 🔹 Generate Salt
+      user.password = await bcrypt.hash(password, salt); // 🔹 Hash Password
+    }
     if (profilePicture) user.profilePicture = cloudResponse.secure_url;
 
     await user.save();

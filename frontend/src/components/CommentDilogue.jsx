@@ -5,8 +5,8 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Dialog, DialogClose, DialogContent, DialogTrigger } from './ui/dialog';
 import { Input } from './ui/input';
 
-const CommentDilogue = ({ open, setOpen }) => {
-  const [text, setText] = useState(false);
+const CommentDilogue = ({ open, setOpen , post }) => {
+  const [text, setText] = useState("");
 
   const changeEentHandler = (e) => {
     const inputText = e.target.value;
@@ -17,7 +17,7 @@ const CommentDilogue = ({ open, setOpen }) => {
     }
   };
   return (
-    <Dialog className="border-none" open={open} onOpenChange={setOpen}>
+    <Dialog className="border-none rounded-lg shadow-lg bg-white" open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <div className="px-3 py-1 cursor-pointer text-gray-500 text-sm font-semibold">
           View all comments
@@ -25,12 +25,12 @@ const CommentDilogue = ({ open, setOpen }) => {
       </DialogTrigger>
       <DialogContent
         onInteractOutside={() => setOpen(false)}
-        className="max-w-3xl flex flex-col p-0"
+        className="max-w-3xl flex flex-col p-0 border-none outline-none shadow-none"
       >
         <div className="flex flex-1">
           <div className="w-1/2">
             <img
-              src="https://res.cloudinary.com/dh3nmgwdy/image/upload/v1739655129/ok02vsprcryhvabjpswg.jpg"
+              src={post?.image}
               alt="Post"
               className="w-full h-full object-cover rounded-l-lg"
             />
@@ -42,7 +42,7 @@ const CommentDilogue = ({ open, setOpen }) => {
                 <Link>
                   <Avatar className="w-10 h-10">
                     <AvatarImage
-                      src=""
+                      src={post?.author?.profilePicture}
                       alt="User"
                     />
                     <AvatarFallback>U</AvatarFallback>
@@ -51,7 +51,7 @@ const CommentDilogue = ({ open, setOpen }) => {
 
                 <div className="flex items-center">
                   <Link>
-                    <p className="text-sm font-semibold">Suraj Kumar</p>
+                    <p className="text-sm font-semibold">{post?.author?.username}</p>
                   </Link>
                 </div>
               </div>
