@@ -1,12 +1,28 @@
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useToast } from '@/hooks/use-toast';
-import { sidebarItems } from '@/utils/constan';
+import {
+  Heart,
+  Home,
+  LayoutDashboardIcon,
+  LogOut,
+  MessageCircle,
+  PlusSquare,
+  Search,
+  TrendingUp,
+} from 'lucide-react';
+// import { sidebarItems } from '@/utils/constan';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { setAuthUser } from '@/Redux/Slices/authSlices';
 
 const LeftSidebar = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const API_BASE_URL = import.meta.env.VITE_API_URL;
+
+  const { user } = useSelector((store) => store.auth);
+  const dispatch = useDispatch();
 
   const handleLogout = async () => {
     try {
@@ -16,6 +32,7 @@ const LeftSidebar = () => {
       console.log(res);
 
       if (res.status === 200) {
+        dispatch(setAuthUser(null))
         navigate('/login');
         toast({
           title: res?.data?.message,
@@ -36,6 +53,27 @@ const LeftSidebar = () => {
       handleLogout();
     }
   };
+
+  const sidebarItems = [
+    { icon: <Home />, text: 'Home' },
+    { icon: <Search />, text: 'Search' },
+    { icon: <TrendingUp />, text: 'Explore' },
+    { icon: <MessageCircle />, text: 'Messages' },
+    { icon: <Heart />, text: 'Notifications' },
+    { icon: <PlusSquare />, text: 'Create' },
+    { icon: <LayoutDashboardIcon />, text: 'Dashboard' },
+    {
+      icon: (
+        <Avatar className="w-6 h-6">
+          <AvatarImage src={user?.profilePicture} alt="@shadcn" />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+      ),
+      text: 'Profile',
+    },
+    { icon: <LogOut />, text: 'Logout' },
+  ];
+
   return (
     <div className="fixed top-0 z-10 left-0 px-4 border-r border-gray-300 w-[16%] h-screen">
       <div className="flex flex-col">

@@ -6,6 +6,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
+import { useDispatch } from 'react-redux';
+import { setAuthUser } from '@/Redux/Slices/authSlices';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +15,7 @@ const Login = () => {
     password: '',
   });
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const API_BASE_URL = import.meta.env.VITE_API_URL;
@@ -35,7 +38,9 @@ const Login = () => {
       //   console.log(res);
 
       if (res.status === 200) {
+        dispatch(setAuthUser(res.data.user));
         navigate('/');
+
         toast({
           title: res?.data?.message,
           variant: 'success',

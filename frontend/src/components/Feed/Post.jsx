@@ -37,7 +37,7 @@ const Post = () => {
         <div className="flex items-center">
           <Avatar className="w-10 h-10">
             <AvatarImage
-              src="https://instagram.fbho4-4.fna.fbcdn.net/v/t51.2885…ywmq1tEVyyCi_uy5RtTCvQ&oe=67BA2071&_nc_sid=ead929"
+              src=""
               alt="User"
             />
             <AvatarFallback>U</AvatarFallback>
