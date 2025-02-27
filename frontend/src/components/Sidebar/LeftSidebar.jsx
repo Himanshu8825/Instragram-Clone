@@ -59,6 +59,10 @@ const LeftSidebar = () => {
       handleLogout();
     } else if (item.text === 'Create') {
       setOpen(true);
+    }else if(item.text === 'Profile'){
+      navigate(`/profile/${user?._id}`);
+    }else if(item.text === 'Home') {
+      navigate('/');
     }
   };
 

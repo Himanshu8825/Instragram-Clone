@@ -4,7 +4,6 @@ import { setPosts, setSelectedPost } from '@/Redux/Slices/postSlice';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import {
-
   Bookmark,
   Heart,
   MessageCircle,
@@ -14,6 +13,7 @@ import {
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { Badge } from '../ui/badge';
 import { Card, CardContent } from '../ui/card';
 import {
   Dialog,
@@ -22,7 +22,6 @@ import {
   DialogTrigger,
 } from '../ui/dialog';
 import { Input } from '../ui/input';
-import { Badge } from '../ui/badge';
 
 const Post = ({ post }) => {
   const { user } = useSelector((state) => state.auth);
@@ -30,7 +29,7 @@ const Post = ({ post }) => {
   const { selectedPost } = useSelector((state) => state.post);
   const [text, setText] = useState('');
   const [open, setOpen] = useState(false);
-  const [liked, setLiked] = useState(post.likes.includes(user._id) || false);
+  const [liked, setLiked] = useState(post.likes.includes(user?._id) || false);
   const [postLike, setPostLike] = useState(post.likes.length);
   const [comment, setComment] = useState(post.comments);
 
@@ -47,19 +46,27 @@ const Post = ({ post }) => {
     const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
     const diffInMinutes = Math.floor(diffInSeconds / 60);
     const diffInHours = Math.floor(diffInMinutes / 60);
+    const diffInDays = Math.floor(diffInHours / 24);
+    const diffInMonths = Math.floor(diffInDays / 30);
+    const diffInYears = Math.floor(diffInMonths / 12);
 
     if (diffInSeconds < 10) {
-      return 'Just now'; // 10 sec se kam ho to "Just now"
+      return 'Just now';
     } else if (diffInMinutes < 1) {
-      return `${diffInSeconds} seconds ago`; // 10 sec se upar but 1 min se kam ho
+      return `${diffInSeconds} seconds ago`;
     } else if (diffInMinutes < 60) {
-      return `${diffInMinutes} minutes ago`; // 1 min se upar but 1 hour se kam ho
-    } else if (diffInHours === 1) {
-      return '1 hour ago'; // Exact 1 hour
+      return `${diffInMinutes} minutes ago`;
+    } else if (diffInHours < 24) {
+      return `${diffInHours} ${diffInHours === 1 ? 'hour' : 'hours'} ago`;
+    } else if (diffInDays < 30) {
+      return `${diffInDays} ${diffInDays === 1 ? 'day' : 'days'} ago`;
+    } else if (diffInMonths < 12) {
+      return `${diffInMonths} ${diffInMonths === 1 ? 'month' : 'months'} ago`;
     } else {
-      return `${diffInHours} hours ago`; // 1 hour se upar ho to
+      return `${diffInYears} ${diffInYears === 1 ? 'year' : 'years'} ago`;
     }
   };
+
 
   const changeEentHandler = (e) => {
     const inputText = e.target.value;
@@ -193,18 +200,22 @@ const Post = ({ post }) => {
   };
 
   return (
-    <Card className=" w-full mx-auto border-none rounded-lg shadow-sm px-2 py-2 ">
+    <Card className=" w-full mx-auto border-none rounded-lg shadow-sm  py- ">
       {/* Header - User Info */}
-      <div className="flex items-center justify-between p-3">
+      <div className="flex items-center justify-between py-2">
         <div className="flex items-center">
           <Avatar className="w-10 h-10">
             <AvatarImage src={post?.author?.profilePicture} alt="User" />
             <AvatarFallback>U</AvatarFallback>
           </Avatar>
           <div className="ml-3">
-            <div className='flex items-center gap-2'>
+            <div className="flex items-center gap-2">
               <p className="text-sm font-semibold">{post?.author?.username}</p>
-              {user?._id === post?.author?._id && <Badge className="h-6 cursor-pointer" variant="secondary">Author</Badge>}
+              {user?._id === post?.author?._id && (
+                <Badge className="h-6 cursor-pointer" variant="secondary">
+                  Author
+                </Badge>
+              )}
             </div>
             <p className="text-xs text-gray-500">
               {getTimeAgo(post?.createdAt)}
@@ -221,7 +232,7 @@ const Post = ({ post }) => {
           </DialogTrigger>
           <DialogContent className="p-4 rounded-lg shadow-lg max-w-xs text-center">
             <div className="flex flex-col mt-2 text-sm text-center">
-              {post.author._id !== user._id ? (
+              {post.author._id !== user?._id ? (
                 <div className="py-3 font-bold text-red-500 cursor-pointer">
                   Unfollow
                 </div>
@@ -232,7 +243,7 @@ const Post = ({ post }) => {
               <div className="py-3 font-semibold cursor-pointer">
                 Add to Favorites
               </div>
-              {post.author._id === user._id ? (
+              {post?.author?._id === user?._id ? (
                 <div
                   onClick={deletePostHandler}
                   className="py-3 font-semibold cursor-pointer"
@@ -256,7 +267,7 @@ const Post = ({ post }) => {
         <img
           src={post?.image}
           alt="Post"
-          className="w-full object-cover h-[450px] object-top rounded"
+          className="w-full object-cover aspect-[3/4] rounded"
         />
       </CardContent>
 

@@ -7,7 +7,7 @@ const Posts = () => {
 
 
   return (
-    <div className="w-[40%]">
+    <div className="w-[60%]">
       {posts?.map((post) => (
         <Post key={post._id} post={post}  />
       ))}{' '}
