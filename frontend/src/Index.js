@@ -11,6 +11,7 @@ import Profile from './components/Layout/Profile';
 import LeftSidebar from './components/Sidebar/LeftSidebar';
 import RightSidebar from './components/Sidebar/RightSidebar';
 import GetAllPosts from './hooks/GetAllPosts';
+import EditProfile from './components/Layout/EditProfile';
 
 export {
   CommentDilogue,
@@ -26,6 +27,7 @@ export {
   RightSidebar,
   Signup,
   GetAllPosts,
+  EditProfile
 };
 
 /*

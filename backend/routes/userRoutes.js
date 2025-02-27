@@ -24,7 +24,7 @@ userRouter.get('/:id/profile', isAuthenticated, getProfile);
 userRouter.post(
   '/profile/edits',
   isAuthenticated,
-  upload.single('profilePicture'),
+  upload.single('profilePhoto'),
   editProfile
 );
 
