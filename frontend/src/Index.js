@@ -12,6 +12,8 @@ import LeftSidebar from './components/Sidebar/LeftSidebar';
 import RightSidebar from './components/Sidebar/RightSidebar';
 import GetAllPosts from './hooks/GetAllPosts';
 import EditProfile from './components/Layout/EditProfile';
+import ChatPage from './components/Chat/ChatPage';
+import Messages from './components/Chat/Messages';
 
 export {
   CommentDilogue,
@@ -27,7 +29,9 @@ export {
   RightSidebar,
   Signup,
   GetAllPosts,
-  EditProfile
+  EditProfile,
+  ChatPage,
+  Messages
 };
 
 /*

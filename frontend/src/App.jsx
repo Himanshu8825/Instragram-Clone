@@ -1,5 +1,13 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { EditProfile, Home, Login, MainLayout, Profile, Signup } from './Index';
+import {
+  ChatPage,
+  EditProfile,
+  Home,
+  Login,
+  MainLayout,
+  Profile,
+  Signup,
+} from './Index';
 
 const App = () => {
   const browserRouter = createBrowserRouter([
@@ -12,13 +20,17 @@ const App = () => {
           element: <Home />,
         },
         {
-          path:'/profile/:id',
+          path: '/profile/:id',
           element: <Profile />,
         },
         {
-          path:'/account/edit',
+          path: '/account/edit',
           element: <EditProfile />,
-        }
+        },
+        {
+          path: '/chat',
+          element: <ChatPage />,
+        },
       ],
     },
     {

@@ -22,7 +22,7 @@ postRouter.post(
   addNewPost
 );
 
-postRouter.get('/all', getAllPost);
+postRouter.get('/all', isAuthenticated, getAllPost);
 
 postRouter.get('/userpost/all', isAuthenticated, getUserPosts);
 

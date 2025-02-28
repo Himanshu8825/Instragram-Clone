@@ -8,7 +8,7 @@ const MainLayout = () => {
       <LeftSidebar />
 
       {/* Main Content Wrapper with margin to prevent overlap */}
-      <div className="ml-[20%] flex-1 p-6">
+      <div className="ml-[20%] flex-1 ">
         <Outlet />
       </div>
     </div>
