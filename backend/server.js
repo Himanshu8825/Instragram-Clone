@@ -6,8 +6,7 @@ const connectDB = require('./utils/DB');
 const userRouter = require('./routes/userRoutes');
 const postRouter = require('./routes/postRoutes');
 const messageRouter = require('./routes/messageRoutes');
-
-const app = express();
+const { app , server } = require('./socket/socket');
 
 //! Environment variables
 const port = process.env.PORT || 5000;
@@ -38,6 +37,6 @@ app.use('/api/v1/messages', messageRouter);
 
 //"http://localhost:3000/api/v1/users"
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
