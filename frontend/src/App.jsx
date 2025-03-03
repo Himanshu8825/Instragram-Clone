@@ -1,4 +1,7 @@
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { io } from 'socket.io-client';
 import {
   ChatPage,
   EditProfile,
@@ -8,8 +11,39 @@ import {
   Profile,
   Signup,
 } from './Index';
+import { setOnlineUsers } from './Redux/Slices/chatSlice';
+import { setSocket } from './Redux/Slices/socketSlice';
 
 const App = () => {
+  const { user } = useSelector((state) => state.auth);
+  const {socket} = useSelector((state)=>state.socketio);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (user) {
+      const socketio = io('http://localhost:3000', {
+        query: {
+          userId: user?._id,
+        },
+        transports: ['websocket'],
+      });
+
+      dispatch(setSocket(socketio));
+
+      socketio.on('getOnlineUsers', (onlineUsers) => {
+        dispatch(setOnlineUsers(onlineUsers));
+      });
+
+      return () => {
+        socketio.close();
+        dispatch(setSocket(null));
+      };
+    } else if(socket) {
+      socket.close();
+      dispatch(setSocket(null));
+    }
+  }, [user, dispatch]);
+
   const browserRouter = createBrowserRouter([
     {
       path: '/',
