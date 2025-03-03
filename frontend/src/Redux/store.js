@@ -3,6 +3,7 @@ import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; // LocalStorage use karne ke liye
 import authSlice from './Slices/authSlices';
 import chatSlice from './Slices/chatSlice';
+import notificationSlice from './Slices/notification';
 import postSlice from './Slices/postSlice';
 import socketSlice from './Slices/socketSlice';
 
@@ -19,6 +20,7 @@ const store = configureStore({
     post: postSlice,
     socketio: socketSlice,
     chat: chatSlice,
+    notification: notificationSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

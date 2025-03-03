@@ -12,11 +12,12 @@ import {
   Signup,
 } from './Index';
 import { setOnlineUsers } from './Redux/Slices/chatSlice';
+import { setLikeNotification } from './Redux/Slices/notification';
 import { setSocket } from './Redux/Slices/socketSlice';
 
 const App = () => {
   const { user } = useSelector((state) => state.auth);
-  const {socket} = useSelector((state)=>state.socketio);
+  const { socket } = useSelector((state) => state.socketio);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -34,11 +35,17 @@ const App = () => {
         dispatch(setOnlineUsers(onlineUsers));
       });
 
+      socketio.on('notification', (notification) => {
+        console.log(notification );
+
+        dispatch(setLikeNotification(notification ));
+      });
+
       return () => {
         socketio.close();
         dispatch(setSocket(null));
       };
-    } else if(socket) {
+    } else if (socket) {
       socket.close();
       dispatch(setSocket(null));
     }

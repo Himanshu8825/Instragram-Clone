@@ -6,7 +6,7 @@ const RightSidebar = () => {
   const { user } = useSelector((state) => state.auth);
   const { suggestedUsers } = useSelector((state) => state?.auth || []);
 
-  console.log(suggestedUsers.username);
+  // console.log(suggestedUsers.username);
 
   return (
     <div className=" pr-6 py-8 text-gray-900">
