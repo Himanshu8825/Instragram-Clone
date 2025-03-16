@@ -3,6 +3,7 @@ const cloudinary = require('../utils/cloudinary');
 const Post = require('../models/Post');
 const User = require('../models/User');
 const Comment = require('../models/Comment');
+const { getReciverSocketID, io } = require('../socket/socket');
 
 const addNewPost = async (req, res) => {
   try {
@@ -107,7 +108,24 @@ const likePost = async (req, res) => {
 
     await post.updateOne({ $addToSet: { likes: likedUserId } });
 
+    //!Implementing Real Time Notification
+    const user = await User.findById(likedUserId);
     await post.save();
+
+    const postOwnerId = post.author.toString();
+    if (postOwnerId !== likedUserId) {
+      const notification = {
+        type: 'like',
+        userId: likedUserId,
+        userDetails: user,
+        postId,
+        message: 'You post was liked',
+      };
+      const postOwnerSocketId = getReciverSocketID(postOwnerId);
+      io.to(postOwnerSocketId).emit('notification', notification);
+    }
+
+
 
     return res
       .status(200)
@@ -134,7 +152,25 @@ const dislikePost = async (req, res) => {
 
     await post.updateOne({ $pull: { likes: likedUserId } });
 
+    //!Implementing Real Time Notification
+    const user = await User.findById(likedUserId);
+
     await post.save();
+
+    const postOwnerId = post.author.toString();
+    if (postOwnerId !== likedUserId) {
+      const notification = {
+        type: 'dislike',
+        userId: likedUserId,
+        userDetails: user,
+        postId,
+        message:  'Your post was disliked',
+      };
+      const postOwnerSocketId = getReciverSocketID(postOwnerId);
+      io.to(postOwnerSocketId).emit('notification', notification);
+    }
+
+
 
     return res
       .status(200)
@@ -263,13 +299,13 @@ const bookMarkPost = async (req, res) => {
     const user = await User.findById(authorId);
 
     if (user.bookmarks.includes(post._id)) {
-      await user.updateOne({ $pull: { bookmarks: post_id } });
+      await user.updateOne({ $pull: { bookmarks: post._id } });
       await user.save();
       return res
         .status(200)
         .json({ success: true, message: 'Post remove from successfully' });
     } else {
-      await user.updateOne({ $addToSet: { bookmarks: post_id } });
+      await user.updateOne({ $addToSet: { bookmarks: post._id } });
       await user.save();
       return res
         .status(200)

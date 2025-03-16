@@ -36,6 +36,6 @@ postRouter.get('/:id/comment/all', isAuthenticated, commentsForSapratePost);
 
 postRouter.delete('/delete/:id', isAuthenticated, deletePost);
 
-postRouter.post('/:id/bookmark', isAuthenticated, bookMarkPost);
+postRouter.get('/:id/bookmark', isAuthenticated, bookMarkPost);
 
 module.exports = postRouter;

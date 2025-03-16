@@ -36,7 +36,7 @@ const App = () => {
       });
 
       socketio.on('notification', (notification) => {
-        console.log(notification );
+      
 
         dispatch(setLikeNotification(notification ));
       });

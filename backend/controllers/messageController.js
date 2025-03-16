@@ -1,17 +1,19 @@
 const Conversation = require('../models/Conversation');
 const Message = require('../models/Message');
+const { getReciverSocketID, io } = require('../socket/socket');
 
 const sendMessage = async (req, res) => {
   try {
     const senderId = req.id;
     const receiverId = req.params.id;
     const { message } = req.body;
+    
 
     let conversation = await Conversation.findOne({
       participants: { $all: [senderId, receiverId] },
     });
 
-    if (!Conversation) {
+    if (!conversation) {
       conversation = await Conversation.create({
         participants: [senderId, receiverId],
       });
@@ -30,10 +32,17 @@ const sendMessage = async (req, res) => {
     await Promise.all([conversation.save(), newMessage.save()]);
 
     //!Socket IO Implementation
+    const reciverSocketID = getReciverSocketID(receiverId);
+    if (reciverSocketID) {
+      io.to(reciverSocketID).emit('newMessage', newMessage);
 
-    return res
-      .status(201)
-      .json({ message: 'Message sent successfully', success: true });
+    }
+
+    return res.status(201).json({
+      message: 'Message sent successfully',
+      success: true,
+      newMessage,
+    });
   } catch (error) {
     console.log(error);
     return res
@@ -47,9 +56,9 @@ const getMessage = async (req, res) => {
     const senderId = req.id;
     const reciverId = req.params.id;
 
-    const conversation = await Conversation.find({
+    const conversation = await Conversation.findOne({
       participants: { $all: [senderId, reciverId] },
-    });
+    }).populate('messages');
 
     if (!conversation) {
       return res.status(200).json({ success: true, messages: [] });
@@ -65,7 +74,6 @@ const getMessage = async (req, res) => {
       .json({ success: false, message: "Can't get message" });
   }
 };
-
 
 module.exports = {
   sendMessage,

@@ -7,8 +7,6 @@ const getRealTimeMessages = () => {
   const { socket } = useSelector((state) => state.socketio);
   const { messages } = useSelector((state) => state.chat);
 
-  console.log("Message: " , messages);
-  console.log("Socket: " , socket);
 
 
 

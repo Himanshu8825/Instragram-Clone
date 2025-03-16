@@ -148,9 +148,9 @@ const getProfile = async (req, res) => {
 
 const editProfile = async (req, res) => {
   try {
-    // console.log("Uploaded File: ", req.file);
+
     const userId = req.id;
-    // console.log(userId);
+
 
     const { bio, gender, username } = req.body;
 
@@ -174,7 +174,7 @@ const editProfile = async (req, res) => {
     if (bio) user.bio = bio;
     if (gender) user.gender = gender;
     if (username) {
-      console.log(username);
+      
 
       user.username = username;
     }

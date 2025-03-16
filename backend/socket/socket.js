@@ -16,13 +16,19 @@ const io = new Server(server, {
 //! Object to store userId and corresponding socketId
 const userSocketMap = {};
 
+  const getReciverSocketID = (reciverID) => {
+  return userSocketMap[reciverID];
+};
+
 //! Handle new socket connections
 io.on('connection', (socket) => {
   const userId = socket.handshake.query.userId;
 
   if (userId) {
     userSocketMap[userId] = socket.id;
-    console.log(`User connected with ID: ${socket.id}`);
+    // console.log(
+    //   `User connected with UserID: ${userId} & socketID: ${socket.id}`
+    // );
   }
 
   //! Emit updated online users list to all connected clients
@@ -31,8 +37,10 @@ io.on('connection', (socket) => {
   //! Handle socket disconnection
   socket.on('disconnect', () => {
     if (userId) {
-      console.log(`User disconnected with ID: ${socket.id}`);
-      delete userSocketMap[userId]; 
+      // console.log(
+      //   `User disconnected with UserID: ${userId} & socketID: ${socket.id}`
+      // );
+      delete userSocketMap[userId];
     }
 
     //! Emit updated online users list after disconnection
@@ -41,4 +49,4 @@ io.on('connection', (socket) => {
 });
 
 //! Export app, server, and io instance for use in other files
-module.exports = { app, server, io };
+module.exports = { app, server, io , getReciverSocketID };

@@ -78,7 +78,7 @@ const CommentDilogue = ({ open, setOpen, post }) => {
     }
   };
 
-  console.log(selectedPost);
+
 
   return (
     <Dialog

@@ -5,6 +5,7 @@ import axios from 'axios';
 import { motion } from 'framer-motion';
 import {
   Bookmark,
+  BookmarkCheck,
   Heart,
   MessageCircle,
   MoreHorizontal,
@@ -32,6 +33,7 @@ const Post = ({ post }) => {
   const [liked, setLiked] = useState(post.likes.includes(user?._id) || false);
   const [postLike, setPostLike] = useState(post.likes.length);
   const [comment, setComment] = useState(post.comments);
+  const [isBookMarked, setIsBookMarked] = useState(false);
 
   const API_BASE_URL = import.meta.env.VITE_API_URL;
   const dispatch = useDispatch();
@@ -66,7 +68,6 @@ const Post = ({ post }) => {
       return `${diffInYears} ${diffInYears === 1 ? 'year' : 'years'} ago`;
     }
   };
-
 
   const changeEentHandler = (e) => {
     const inputText = e.target.value;
@@ -199,6 +200,29 @@ const Post = ({ post }) => {
     }
   };
 
+  const bookMarkHandler = async () => {
+    try {
+      const res = await axios.get(
+        `${API_BASE_URL}/posts/${post?._id}/bookmark`,
+        { withCredentials: true }
+      );
+
+      if (res.data.success) {
+        setIsBookMarked((prev) => !prev);
+        toast({
+          title: res?.data?.message,
+          variant: 'success',
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: error?.response?.data?.message || 'Failed to add comment',
+        variant: 'destructive',
+      });
+    }
+  };
+
   return (
     <Card className=" w-full mx-auto border-none rounded-lg shadow-sm  py- ">
       {/* Header - User Info */}
@@ -302,8 +326,18 @@ const Post = ({ post }) => {
             <SendHorizontal className="w-6 h-6 transform rotate-[330deg]" />
           </div>
         </div>
-        <div className="p-2 rounded-full hover:bg-gray-100 cursor-pointer">
-          <Bookmark className="w-5 h-5" />
+        <div className=" rounded-full hover:bg-gray-100 cursor-pointer">
+          <motion.button
+            onClick={bookMarkHandler}
+            whileTap={{ scale: 0.8 }} // Click bounce effect
+            className="p-2 rounded-full hover:bg-gray-100 transition-all duration-300"
+          >
+            {isBookMarked ? (
+              <BookmarkCheck className="w-6 h-6 text-black" />
+            ) : (
+              <Bookmark className="w-6 h-6 text-black" /> 
+            )}
+          </motion.button>
         </div>
       </div>
 
