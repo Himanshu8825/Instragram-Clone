@@ -15,7 +15,7 @@ const AllUsers = () => {
         const response = await axios.get(`${API_BASE_URL}/all`);
         setUsers(response?.data?.users); // Fixing the data extraction
 
-        console.log("Data For All USers ",response?.data?.users);
+        console.log("Data For All USers ",response);
 
       } catch (err) {
         console.error('Error fetching users:', err);
