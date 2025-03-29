@@ -31,7 +31,7 @@ const AllUsers = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-4">
-      <div className="flex gap-2 place-items-center justify-start">
+      <div className="flex gap-4  justify-start">
         {users?.map((user) => (
           <div key={user?._id} className="flex flex-col items-center">
             <Avatar className="w-16 h-16 cursor-pointer">
@@ -42,7 +42,7 @@ const AllUsers = () => {
               />
               <AvatarFallback>{user?.username?.charAt(0) || "U"}</AvatarFallback>
             </Avatar>
-            <p className="mt-2 font-semibold">{user?.username}</p>
+            <p className="mt-2 text-sm text-black">{user?.username}</p>
           </div>
         ))}
       </div>
