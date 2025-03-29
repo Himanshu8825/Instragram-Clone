@@ -14,6 +14,7 @@ import GetAllPosts from './hooks/GetAllPosts';
 import EditProfile from './components/Layout/EditProfile';
 import ChatPage from './components/Chat/ChatPage';
 import Messages from './components/Chat/Messages';
+import ProctedRoute from './components/ProctedRoute';
 
 export {
   CommentDilogue,
@@ -31,7 +32,8 @@ export {
   GetAllPosts,
   EditProfile,
   ChatPage,
-  Messages
+  Messages,
+  ProctedRoute,
 };
 
 /*

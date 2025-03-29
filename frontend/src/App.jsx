@@ -8,6 +8,7 @@ import {
   Home,
   Login,
   MainLayout,
+  ProctedRoute,
   Profile,
   Signup,
 } from './Index';
@@ -36,9 +37,7 @@ const App = () => {
       });
 
       socketio.on('notification', (notification) => {
-      
-
-        dispatch(setLikeNotification(notification ));
+        dispatch(setLikeNotification(notification));
       });
 
       return () => {
@@ -54,23 +53,27 @@ const App = () => {
   const browserRouter = createBrowserRouter([
     {
       path: '/',
-      element: <MainLayout />,
+      element: (
+        <ProctedRoute>
+          <MainLayout />
+        </ProctedRoute>
+      ),
       children: [
         {
           path: '/',
-          element: <Home />,
+          element: <ProctedRoute><Home /></ProctedRoute>,
         },
         {
           path: '/profile/:id',
-          element: <Profile />,
+          element: <ProctedRoute><Profile /></ProctedRoute>,
         },
         {
           path: '/account/edit',
-          element: <EditProfile />,
+          element:<ProctedRoute><EditProfile /></ProctedRoute> ,
         },
         {
           path: '/chat',
-          element: <ChatPage />,
+          element: <ProctedRoute><ChatPage /></ProctedRoute>,
         },
       ],
     },

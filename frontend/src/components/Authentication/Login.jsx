@@ -1,19 +1,20 @@
 import { useToast } from '@/hooks/use-toast';
+import { setAuthUser } from '@/Redux/Slices/authSlices';
 import axios from 'axios';
 import { Loader2 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
-import { useDispatch } from 'react-redux';
-import { setAuthUser } from '@/Redux/Slices/authSlices';
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
+  const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -61,6 +62,12 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, []);
 
   return (
     <div className=" flex w-screen h-screen items-center justify-center">
