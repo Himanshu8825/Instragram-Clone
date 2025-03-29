@@ -12,7 +12,7 @@ const AllUsers = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/all`);
+        const response = await axios.get(`${API_BASE_URL}/users/all`);
         setUsers(response?.data?.users); // Fixing the data extraction
 
         console.log("Data For All USers ",response);
