@@ -13,6 +13,8 @@ const io = new Server(server, {
   },
 });
 
+console.log(process.env.URL);
+
 //! Object to store userId and corresponding socketId
 const userSocketMap = {};
 
