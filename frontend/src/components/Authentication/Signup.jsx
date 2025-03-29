@@ -18,7 +18,7 @@ const Signup = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const API_BASE_URL = import.meta.env.VITE_API_URL;
+  const API_BASE_URL = 'https://instragram-clone-yubw.onrender.com/api/v1';
 
   const { toast } = useToast();
 

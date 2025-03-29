@@ -19,7 +19,7 @@ const ChatPage = () => {
   const { onlineUsers, messages } = useSelector((state) => state.chat);
   const dispatch = useDispatch();
 
-  const API_BASE_URL = import.meta.env.VITE_API_URL;
+  const API_BASE_URL = 'https://instragram-clone-yubw.onrender.com/api/v1';
 
   // console.log(onlineUsers);
 

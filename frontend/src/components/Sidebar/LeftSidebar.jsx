@@ -28,7 +28,7 @@ const LeftSidebar = () => {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
-  const API_BASE_URL = import.meta.env.VITE_API_URL;
+  const API_BASE_URL = 'https://instragram-clone-yubw.onrender.com/api/v1';
 
   const { user } = useSelector((store) => store.auth);
   const { likeNotification, viewedNotifications } = useSelector(

@@ -33,7 +33,7 @@
       e.preventDefault();
       setLoading(true);
       try {
-        console.log("API",API_BASE_URL);
+       
         const res = await axios.post(`${API_BASE_URL}/users/login`, formData, {
           headers: {
             'Content-Type': 'application/json',

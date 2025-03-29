@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const getAllMessages = () => {
   const dispatch = useDispatch();
-  const API_BASE_URL = import.meta.env.VITE_API_URL;
+  const API_BASE_URL = 'https://instragram-clone-yubw.onrender.com/api/v1';
 
   const { selectedUser } = useSelector((state) => state.auth);
 

@@ -16,7 +16,7 @@ const CreatePost = ({ open, setOpen }) => {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const dispatch = useDispatch();
-  const API_BASE_URL = import.meta.env.VITE_API_URL;
+  const API_BASE_URL = 'https://instragram-clone-yubw.onrender.com/api/v1';
   const { posts } = useSelector((state) => state.post);
 
   const fileChangeHandler = async (e) => {

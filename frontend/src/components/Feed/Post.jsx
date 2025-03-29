@@ -35,7 +35,7 @@ const Post = ({ post }) => {
   const [comment, setComment] = useState(post.comments);
   const [isBookMarked, setIsBookMarked] = useState(false);
 
-  const API_BASE_URL = import.meta.env.VITE_API_URL;
+  const API_BASE_URL = 'https://instragram-clone-yubw.onrender.com/api/v1';
   const dispatch = useDispatch();
   const { toast } = useToast();
 
@@ -335,7 +335,7 @@ const Post = ({ post }) => {
             {isBookMarked ? (
               <BookmarkCheck className="w-6 h-6 text-black" />
             ) : (
-              <Bookmark className="w-6 h-6 text-black" /> 
+              <Bookmark className="w-6 h-6 text-black" />
             )}
           </motion.button>
         </div>

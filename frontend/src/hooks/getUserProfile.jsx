@@ -7,7 +7,7 @@ import { useToast } from './use-toast';
 const getUserProfile = (userID) => {
   const { toast } = useToast();
   const dispatch = useDispatch();
-  const API_BASE_URL = import.meta.env.VITE_API_URL;
+  const API_BASE_URL = 'https://instragram-clone-yubw.onrender.com/api/v1';
 
   useEffect(() => {
     const fetchUserProfile = async () => {
