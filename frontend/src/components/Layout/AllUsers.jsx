@@ -12,7 +12,7 @@ const AllUsers = () => {
       try {
         const response = await axios.get(`${API_BASE_URL}/all`);
         console.log(response);
-        
+
         setUsers(response.data.users);
       } catch (err) {
         console.error('Error fetching users:', err);
@@ -32,7 +32,7 @@ const AllUsers = () => {
     <div>
       <h2>All Users</h2>
       <ul>
-        {users.map((user) => (
+        {users?.map((user) => (
           <li key={user._id}>
             <strong>{user.username}</strong> - {user.email}
           </li>
