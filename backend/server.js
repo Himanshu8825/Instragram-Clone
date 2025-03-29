@@ -6,10 +6,13 @@ const connectDB = require('./utils/DB');
 const userRouter = require('./routes/userRoutes');
 const postRouter = require('./routes/postRoutes');
 const messageRouter = require('./routes/messageRoutes');
-const { app , server } = require('./socket/socket');
+const { app, server } = require('./socket/socket');
+const path = require('path');
 
 //! Environment variables
 const port = process.env.PORT || 5000;
+
+const ___dirname = path.resolve();
 
 app.get('/', (req, res) => {
   res.send('Hello, World!');
@@ -36,6 +39,11 @@ app.use('/api/v1/posts', postRouter);
 app.use('/api/v1/messages', messageRouter);
 
 //"http://localhost:3000/api/v1/users"
+
+app.use(express.static(path.join(___dirname, '/frontend/dist')));
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(___dirname, 'frontend', 'dist', 'index.html'));
+});
 
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
