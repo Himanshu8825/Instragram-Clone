@@ -14,16 +14,14 @@ const port = process.env.PORT || 5000;
 
 const ___dirname = path.resolve();
 
-app.get('/', (req, res) => {
-  res.send('Hello, World!');
-});
-
-
+// app.get('/', (req, res) => {
+//   res.send('Hello, World!');
+// });
 
 //!middilewares
 app.use(
   cors({
-    origin: process.env.URL,
+    origin: '*',
 
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     credentials: true,

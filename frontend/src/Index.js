@@ -15,6 +15,7 @@ import EditProfile from './components/Layout/EditProfile';
 import ChatPage from './components/Chat/ChatPage';
 import Messages from './components/Chat/Messages';
 import ProctedRoute from './components/ProctedRoute';
+import AllUsers from './components/Layout/AllUsers';
 
 export {
   CommentDilogue,
@@ -34,6 +35,7 @@ export {
   ChatPage,
   Messages,
   ProctedRoute,
+  AllUsers,
 };
 
 /*

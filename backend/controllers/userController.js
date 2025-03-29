@@ -135,7 +135,9 @@ const getProfile = async (req, res) => {
   try {
     const userID = req.params.id;
 
-    let user = await User.findById(userID).populate({path:'posts' , createdAt : -1}).populate('bookmarks');
+    let user = await User.findById(userID)
+      .populate({ path: 'posts', createdAt: -1 })
+      .populate('bookmarks');
 
     return res.status(200).json({ user, success: true });
   } catch (error) {
@@ -148,12 +150,9 @@ const getProfile = async (req, res) => {
 
 const editProfile = async (req, res) => {
   try {
-
     const userId = req.id;
 
-
     const { bio, gender, username } = req.body;
-
 
     const profilePicture = req.file;
     let cloudResponse;
@@ -174,14 +173,9 @@ const editProfile = async (req, res) => {
     if (bio) user.bio = bio;
     if (gender) user.gender = gender;
     if (username) {
-      
-
       user.username = username;
     }
-    // if (password) {
-    //   const salt = await bcrypt.genSalt(10); // 🔹 Generate Salt
-    //   user.password = await bcrypt.hash(password, salt); // 🔹 Hash Password
-    // }
+
     if (profilePicture) user.profilePicture = cloudResponse.secure_url;
 
     await user.save();
@@ -268,6 +262,19 @@ const followOfUnfollow = async (req, res) => {
   }
 };
 
+const allUsers = async (req, res) => {
+  try {
+    const allUsers = await User.find({}, '-password');
+
+    return res.status(200).json({ users: allUsers, success: true });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ message: 'Internal server error', success: false });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
@@ -276,4 +283,5 @@ module.exports = {
   editProfile,
   suggestedUsers,
   followOfUnfollow,
+  allUsers,
 };

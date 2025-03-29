@@ -7,6 +7,7 @@ const {
   editProfile,
   suggestedUsers,
   followOfUnfollow,
+  allUsers,
 } = require('../controllers/userController');
 const isAuthenticated = require('../middlewares/isAuthenticated');
 const upload = require('../middlewares/multer');
@@ -31,5 +32,7 @@ userRouter.post(
 userRouter.get('/suggested', isAuthenticated, suggestedUsers);
 
 userRouter.post('/follow-unfollow/:id', isAuthenticated, followOfUnfollow);
+
+userRouter.get('/all', isAuthenticated, allUsers);
 
 module.exports = userRouter;
